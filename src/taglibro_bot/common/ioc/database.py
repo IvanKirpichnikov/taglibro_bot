@@ -1,0 +1,2 @@
+class DatabaseProvider(Provider):
+    pass
