@@ -2,9 +2,8 @@ from typing import Any
 
 from fluent.runtime import FluentLocalization
 
-from taglibro_bot.common.adapters.localization.errors import NotFoundLocalizationTextError
-from taglibro_bot.common.adapters.localization.escape import localization_escape
-
+from taglibro_bot.telegram_bot.adapters.localization.errors import NotFoundLocalizationTextError
+from taglibro_bot.telegram_bot.adapters.localization.escape import localization_escape
 
 
 class Localization:

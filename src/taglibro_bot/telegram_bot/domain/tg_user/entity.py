@@ -1,12 +1,14 @@
 from datetime import UTC, datetime
 from typing import NewType
-from uuid_utils import UUID, uuid7
+from uuid import UUID
+
+from uuid_utils.compat import uuid7
 
 from taglibro_bot.common.domain.entity import entity
 from taglibro_bot.common.domain.user.entity import User
 
 TgUserId = NewType("TgUserId", UUID)
-OriginTgUserId = NewType("OriginTgUserId", UUID)
+OriginTgUserId = NewType("OriginTgUserId", int)
 OriginTgChatId = NewType("OriginTgChatId", int)
 
 
@@ -36,10 +38,7 @@ class TgUser:
             created_at=datetime.now(tz=UTC),
         )
 
-    def replace(
-        self,
-        full_name: str
-    ) -> "TgUser":
+    def replace(self, full_name: str) -> "TgUser":
         return TgUser(
             id=self.id,
             user=self.user,

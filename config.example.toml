@@ -1,0 +1,15 @@
+[database]
+url = ""
+
+[mesh_access_token_fernet_cryptographer]
+key = ""
+
+[telegram_bot]
+token = ""
+redis_url = ""
+
+[localization]
+default_language = "ru"
+
+[localization.map]
+ru = ""

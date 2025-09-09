@@ -1,0 +1,40 @@
+services:
+  telegram_bot:
+    image: ivankirpichnikov/taglibro_bot
+    restart: unless-stopped
+    volumes:
+      - ./config.toml:/app/config.toml:ro
+    command: taglibro_telegram_bot_cli telegram_bot --config /app/config.toml
+
+  migrations:
+    image: ivankirpichnikov/taglibro_bot
+    volumes:
+      - ./alembic.ini:/app/alembic.ini
+      - ./config.toml:/app/config.toml:ro
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: 
+      POSTGRES_USER: 
+      POSTGRES_DB: 
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgresql_volume:/var/lib/postgresql/data
+
+  redis:
+    image: redis:8.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_volume:/data
+
+volumes:
+  redis_volume:
+  postgresql_volume:

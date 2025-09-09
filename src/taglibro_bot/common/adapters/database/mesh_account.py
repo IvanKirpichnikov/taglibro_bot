@@ -1,13 +1,15 @@
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any, override
+from uuid import UUID
+
 from sqlalchemy import insert, select, update
 from sqlalchemy.ext.asyncio import AsyncConnection
-from uuid_utils import UUID
 
+from taglibro_bot.common.adapters.database.tables import mesh_account_table, user_table
 from taglibro_bot.common.application.mesh_account.cryptographer import MeshAccessTokenCryptographer
 from taglibro_bot.common.application.mesh_account.data_mapper import MeshAccountDataMapper
 from taglibro_bot.common.domain.mesh_account.entity import MeshAccount, MeshAccountId
 from taglibro_bot.common.domain.user.entity import User, UserId
-from taglibro_bot.common.adapters.database.tables import mesh_account_table, user_table
 
 
 class MeshAccountDataMapperImpl(MeshAccountDataMapper):
@@ -24,21 +26,20 @@ class MeshAccountDataMapperImpl(MeshAccountDataMapper):
         self._connection = connection
         self._access_token_cryptographer = access_token_cryptographer
 
+    @override
     async def add(self, entity: MeshAccount) -> None:
         access_token = self._access_token_cryptographer.crypto(entity.access_token)
 
-        statement = (
-            insert(mesh_account_table)
-            .values(
-                id=entity.id,
-                user_id=entity.user.id,
-                access_token=access_token,
-                created_at=entity.created_at,
-            )
+        statement = insert(mesh_account_table).values(
+            id=entity.id,
+            user_id=entity.user.id,
+            access_token=access_token,
+            created_at=entity.created_at,
         )
 
         await self._connection.execute(statement)
 
+    @override
     async def load(self, user_id: UserId) -> MeshAccount:
         statement = (
             select(mesh_account_table)
@@ -53,6 +54,7 @@ class MeshAccountDataMapperImpl(MeshAccountDataMapper):
 
         return self._mapping(fetchone)
 
+    @override
     async def update(self, entity: MeshAccount) -> None:
         statement = (
             update(mesh_account_table)

@@ -1,34 +1,38 @@
-from collections.abc import Container, Hashable
-from typing import Any, Final, Sized
+from collections.abc import Container, Hashable, Sized
+from typing import Any, Final, override
+
+_SECRET_REPR: Final = "********"  # noqa: S105
 
 
-_SECRET_REPR: Final = "*******"
-
-
-class SecretString(Container[Any], Hashable, Sized):
+class SecretString(Container[bool], Hashable, Sized):
     __slots__ = ("_value",)
 
     def __init__(self, value: str) -> None:
         self._value = value
 
+    @override
     def __hash__(self) -> int:
         return hash(self._value)
 
+    @override
     def __len__(self) -> int:
         return len(self._value)
 
+    @override
     def __eq__(self, value: object) -> bool:
         if isinstance(value, str):
             return self._value == value
         return NotImplemented
 
-    def __contains__(self, value: object) -> bool:
+    @override
+    def __contains__(self, value: object) -> Any:
         if isinstance(value, str):
             return value in self._value
         return NotImplemented
 
-    def get_value(self) -> str:
-        return self._value
-
+    @override
     def __repr__(self) -> str:
         return _SECRET_REPR
+
+    def get_value(self) -> str:
+        return self._value

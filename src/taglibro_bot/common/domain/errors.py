@@ -14,6 +14,7 @@ def error[T](cls: type[T]) -> type[T]:
         match_args=False,
     )(cls)
 
+
 @error
 class DomainError(Exception):
     pass

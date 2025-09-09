@@ -1,11 +1,13 @@
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any, override
+from uuid import UUID
+
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncConnection
-from uuid_utils import UUID
 
+from taglibro_bot.common.adapters.database.tables import user_table
 from taglibro_bot.common.application.user.data_mapper import UserDataMapper
 from taglibro_bot.common.domain.user.entity import User, UserId
-from taglibro_bot.common.adapters.database.tables import user_table
 
 
 class UserDataMapperImpl(UserDataMapper):
@@ -17,24 +19,14 @@ class UserDataMapperImpl(UserDataMapper):
     ) -> None:
         self._connection = connection
 
-    async def add(self, user: User) -> User:
-        statement = (
-            insert(user_table)
-            .values(
-                id=user.id,
-                created_at=user.created_at,
-            )
-            .returning(user_table)
+    @override
+    async def add(self, user: User) -> None:
+        statement = insert(user_table).values(
+            id=user.id,
+            created_at=user.created_at,
         )
 
-        cursor_result = await self._connection.execute(statement)
-
-        fetchone = cursor_result.mappings().fetchone()
-        if fetchone is None:
-            raise RuntimeError
-
-        return self._mapping(fetchone)
-
+        await self._connection.execute(statement)
 
     def _mapping(self, row: Mapping[Any, Any]) -> User:
         return User(

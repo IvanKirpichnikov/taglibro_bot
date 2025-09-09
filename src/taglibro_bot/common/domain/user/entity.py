@@ -1,9 +1,10 @@
 from datetime import UTC, datetime
 from typing import NewType
-from uuid_utils import UUID, uuid7
+from uuid import UUID
 
-from taglibro_bot.common.domain.entity import entity, BaseEntity
+from uuid_utils.compat import uuid7
 
+from taglibro_bot.common.domain.entity import BaseEntity, entity
 
 UserId = NewType("UserId", UUID)
 

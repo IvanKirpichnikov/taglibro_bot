@@ -4,8 +4,7 @@ from typing import Any
 
 from fluent.runtime import FluentLocalization, FluentResourceLoader
 
-from taglibro_bot.common.adapters.localization.localization import Localization
-
+from taglibro_bot.telegram_bot.adapters.localization.localization import Localization
 
 
 class LocalizationStorage:

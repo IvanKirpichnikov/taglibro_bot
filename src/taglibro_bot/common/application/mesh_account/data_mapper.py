@@ -5,7 +5,6 @@ from taglibro_bot.common.domain.mesh_account.entity import MeshAccount
 from taglibro_bot.common.domain.user.entity import UserId
 
 
-
 class MeshAccountDataMapper(Protocol):
     @abstractmethod
     async def add(self, entity: MeshAccount) -> None:

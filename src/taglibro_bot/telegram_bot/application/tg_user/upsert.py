@@ -1,10 +1,10 @@
-from taglibro_bot.application.atomicity_management import AtomicityManagement
-from taglibro_bot.application.common import interactor
-from taglibro_bot.application.tg_user.data_mapper import TgUserDataMapper
-from taglibro_bot.application.user.data_mapper import UserDataMapper
-from taglibro_bot.domain.tg_user.entity import OriginTgChatId, OriginTgUserId, TgUser
-from taglibro_bot.domain.tg_user.errors import TgUserLoadError
-from taglibro_bot.domain.user.entity import User
+from taglibro_bot.common.application.atomicity_management import AtomicityManagement
+from taglibro_bot.common.application.common import interactor
+from taglibro_bot.common.application.user.data_mapper import UserDataMapper
+from taglibro_bot.common.domain.user.entity import User
+from taglibro_bot.telegram_bot.application.tg_user.data_mapper import TgUserDataMapper
+from taglibro_bot.telegram_bot.domain.tg_user.entity import OriginTgChatId, OriginTgUserId, TgUser
+from taglibro_bot.telegram_bot.domain.tg_user.errors import TgUserLoadError
 
 
 @interactor
@@ -34,6 +34,5 @@ class UpsertTgUserInteractor:
         else:
             tg_user = tg_user.replace(full_name=full_name)
             await self.tg_user_data_mapper.update(tg_user)
-
 
         await self.atomicity_management.commit()

@@ -3,6 +3,7 @@ from typing import Protocol
 
 from taglibro_bot.telegram_bot.domain.tg_user.entity import OriginTgUserId, TgUser
 
+
 class TgUserDataMapper(Protocol):
     __slots__ = ()
 
